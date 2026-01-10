@@ -1,0 +1,41 @@
+{
+  "name": "squadwallet",
+  "version": "1.0.0",
+  "description": "WhatsApp-based MNEE payment system with AI Agent Treasurer for group treasuries",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "blockchain",
+    "stablecoin",
+    "mnee",
+    "ai",
+    "treasury"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@coinbase/cdp-sdk": "^1.40.1",
+    "@google/generative-ai": "^0.24.1",
+    "@mnee/ts-sdk": "^1.0.3",
+    "@scure/bip39": "^2.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0",
+    "express": "^4.18.2",
+    "openai": "^4.20.0",
+    "twilio": "^4.20.0",
+    "viem": "^2.42.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "hardhat": "^2.19.0"
+  }
+}

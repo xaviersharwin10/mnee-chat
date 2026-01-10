@@ -1,0 +1,16 @@
+node_modules/
+.env
+dist/
+build/
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+artifacts/
+cache/
+typechain-types/
+package-lock.json
+.agent/
+DEMO_SCRIPT.md
+user_map.json
+ngrok.log
