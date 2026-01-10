@@ -113,10 +113,7 @@ function SendToPhone() {
     <div className="container">
       <header>
         <div className="logo-row">
-          <svg className="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="24" fill="#25D366" />
-            <path d="M34 18.5L22.5 30L14 21.5" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <img src="/logo.png" alt="MNEEChat" className="logo-icon" style={{ width: 48, height: 48 }} />
           <h1 className="logo">MNEE<span>Chat</span></h1>
         </div>
         <p className="tagline">Send MNEE to any phone number via WhatsApp</p>
