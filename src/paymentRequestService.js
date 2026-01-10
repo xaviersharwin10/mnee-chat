@@ -86,10 +86,30 @@ export async function createPaymentRequest(requesterPhone, payerAddress, amount,
         'ethereum-sepolia'
     );
 
-    console.log(`✅ Payment request created: ${result.hash}`);
+    console.log(`✅ Payment request tx sent: ${result.hash}`);
+
+    // Wait for receipt and parse the RequestCreated event to get the actual ID
+    let requestId = 'unknown';
+    try {
+        const receipt = await provider.waitForTransaction(result.hash, 1, 30000); // 30s timeout
+        if (receipt && receipt.logs) {
+            for (const log of receipt.logs) {
+                try {
+                    const parsed = paymentRequestInterface.parseLog({ topics: log.topics, data: log.data });
+                    if (parsed && parsed.name === 'RequestCreated') {
+                        requestId = parsed.args[0].toString(); // First arg is the ID
+                        console.log(`📩 Request ID from event: ${requestId}`);
+                        break;
+                    }
+                } catch (e) { /* Not our event */ }
+            }
+        }
+    } catch (e) {
+        console.log('⚠️ Could not parse request ID from receipt, using fallback');
+    }
 
     return {
-        requestId: 'pending', // We'd need to parse events for the actual ID
+        requestId,
         txHash: result.hash,
         amount,
         payer: payerAddress,
@@ -178,15 +198,14 @@ export async function cancelPaymentRequest(requesterPhone, requestId) {
 }
 
 /**
- * Get pending requests for a payer
+ * Get pending requests for a payer (by address)
  */
-export async function getPendingRequestsForPayer(payerPhone) {
-    const payerWallet = await getOrCreateWallet(payerPhone);
+export async function getPendingRequestsForPayer(payerAddress) {
     const contract = getPaymentRequestContract();
     const tokenContract = getTokenContract();
 
     const decimals = await tokenContract.decimals();
-    const requests = await contract.getPendingRequestsAsPayer(payerWallet.address);
+    const requests = await contract.getPendingRequestsAsPayer(payerAddress);
 
     return requests.map(req => ({
         id: req.id.toString(),

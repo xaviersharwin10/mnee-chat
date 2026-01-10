@@ -137,9 +137,7 @@ export async function processMessage({ from, to, message, messageSid, profileNam
     console.error('Error processing message:', error);
     await sendWhatsAppMessage(
       from,
-      `❌ *Oops!* Something went wrong.\n\n` +
-      `_${formatErrorMessage(error)}_\n\n` +
-      `Try again or type *help* for commands.`
+      `${formatErrorMessage(error)}`
     );
   }
 }
@@ -174,25 +172,42 @@ async function sendWelcomeMessage(to, profileName) {
 }
 
 async function sendHelpMessage(to) {
-  const msg = `📚 *MNEEChat Commands*\n\n` +
-    `━━━ 💰 *Wallet* ━━━\n` +
-    `• *balance* - Check MNEE balance\n` +
-    `• *address* - Your wallet address\n` +
+  const msg = `📚 *MNEEchat Command Guide*\n\n` +
+
+    `━━━ 💰 *WALLET* ━━━\n` +
+    `• *balance* - Check your MNEE balance\n` +
+    `• *address* - Show your wallet address\n` +
     `• *deposit* - How to add funds\n\n` +
-    `━━━ 💸 *Transfers* ━━━\n` +
-    `• *send 50 to +91...*\n` +
-    `• *request 20 from +91...*\n` +
-    `• *my requests* - View pending\n` +
-    `• *pay request 1* - Pay request\n\n` +
-    `━━━ 🔒 *Savings* ━━━\n` +
+
+    `━━━ 💸 *SEND MONEY* ━━━\n` +
+    `• *send 10 to +919876543210*\n` +
+    `• *pay 5 to +14155551234*\n\n` +
+
+    `━━━ 📩 *PAYMENT REQUESTS* ━━━\n` +
+    `• *request 50 from +919876543210*\n` +
+    `  ↳ Creates invoice for someone to pay you\n` +
+    `• *my requests* - View all requests\n` +
+    `• *pay request 5* - Pay a specific request\n` +
+    `• *cancel request 5* - Cancel your request\n\n` +
+
+    `━━━ 🔒 *SAVINGS LOCKS* ━━━\n` +
     `• *lock 100 for 7 days*\n` +
-    `• *my locks* - View savings\n` +
-    `• *unlock 1* - Withdraw\n\n` +
-    `━━━ ⏰ *Recurring* ━━━\n` +
-    `• *schedule 25 to +91... weekly*\n` +
-    `• *my schedules* - View active\n` +
-    `• *cancel schedule 1*\n\n` +
-    `💡 _You can also chat naturally!_\n` +
+    `• *lock 50 for 1 hour*\n` +
+    `• *lock 25 for 30 minutes*\n` +
+    `  ↳ Time-lock your MNEE (can't spend until unlock)\n` +
+    `• *my locks* - View your savings\n` +
+    `• *unlock 1* - Withdraw expired lock\n\n` +
+
+    `━━━ ⏰ *RECURRING PAYMENTS* ━━━\n` +
+    `• *schedule 25 to +919876543210 weekly*\n` +
+    `• *schedule 10 to +14155551234 daily*\n` +
+    `• *schedule 5 to +919876543210 every 1 hour*\n` +
+    `  ↳ Auto-pay runs automatically!\n` +
+    `• *my schedules* - View active auto-pays\n` +
+    `• *cancel schedule 1* - Stop an auto-pay\n\n` +
+
+    `━━━━━━━━━━━━━━━━━━━━━━\n` +
+    `💡 _Tip: You can also chat naturally!_\n` +
     `   "please send 10 to +91..."`;
 
   await sendWhatsAppMessage(to, msg);
@@ -309,10 +324,10 @@ async function handleCreateRequestCommand(from, command) {
   try {
     await sendWhatsAppMessage(
       payer,
-      `📩 *Payment Request*\n\n` +
+      `📩 *Payment Request #${result.requestId}*\n\n` +
       `${from} is requesting *${amount} MNEE*\n` +
       (note ? `📝 "${note}"\n\n` : '\n') +
-      `Reply: *pay request ${result.requestId}*`
+      `To Pay ➤ Reply: *pay request ${result.requestId}*`
     );
   } catch (e) {
     console.log('Could not notify payer');
@@ -325,12 +340,29 @@ async function handlePayRequestCommand(from, command) {
 
   const result = await fulfillPaymentRequest(from, requestId);
 
+  // Notify payer (the person who just paid)
   await sendWhatsAppMessage(
     from,
     `✅ *Request Paid!*\n\n` +
     `You paid *${result.amount} MNEE* for request #${requestId}\n\n` +
     `🔗 https://sepolia.etherscan.io/tx/${result.txHash}`
   );
+
+  // Notify the requester (the person who sent the request)
+  try {
+    const { getPhoneByAddress } = await import('./cdpService.js');
+    const requesterPhone = getPhoneByAddress(result.requester);
+    if (requesterPhone) {
+      await sendWhatsAppMessage(
+        requesterPhone,
+        `💰 *Request #${requestId} Paid!*\n\n` +
+        `You received *${result.amount} MNEE* from ${from}!\n\n` +
+        `🔗 https://sepolia.etherscan.io/tx/${result.txHash}`
+      );
+    }
+  } catch (e) {
+    console.log('Could not notify requester:', e.message);
+  }
 }
 
 async function handleMyRequestsCommand(from) {

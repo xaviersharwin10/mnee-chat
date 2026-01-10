@@ -128,12 +128,16 @@ export async function withdrawSavingsLock(phoneNumber, lockId) {
 
     // Check if can withdraw
     const canWithdraw = await contract.canWithdraw(lockId);
+
+    // Check time remaining regardless of canWithdraw to be specific
+    const timeRemaining = await contract.getTimeRemaining(lockId);
+
+    if (timeRemaining > 0n) { // Check BigInt
+        throw new Error(`Lock not expired yet. Wait ${formatDuration(Number(timeRemaining))}.`);
+    }
+
     if (!canWithdraw) {
-        const timeRemaining = await contract.getTimeRemaining(lockId);
-        if (timeRemaining > 0) {
-            throw new Error(`Lock not expired yet. ${formatDuration(Number(timeRemaining))} remaining.`);
-        }
-        throw new Error('Lock already withdrawn or does not exist.');
+        throw new Error('Lock already withdrawn or invalid.');
     }
 
     console.log(`🔓 Withdrawing lock #${lockId} via CDP...`);

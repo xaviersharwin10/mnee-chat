@@ -11,46 +11,55 @@ export function formatErrorMessage(error) {
   }
 
   if (error.message) {
-    // User-friendly error messages
     const message = error.message.toLowerCase();
-    
-    if (message.includes('insufficient balance')) {
-      return '❌ Insufficient MNEE balance. Please check your balance and try again.';
+
+    // Funds & Gas - Be specific
+    if (message.includes('insufficient balance') || message.includes('transfer amount exceeds balance')) {
+      return '❌ *Insufficient Funds*\nYou don\'t have enough MNEE wallet balance.';
     }
-    
-    if (message.includes('invalid address')) {
-      return '❌ Invalid recipient address. Please check the phone number or wallet address.';
+    if (message.includes('insufficient funds for gas')) {
+      return '⛽ *Gas Error*\nYou need a tiny bit of ETH for gas fees (Sepolia).';
     }
-    
-    if (message.includes('network') || message.includes('rpc')) {
-      return '❌ Network error. Please try again in a moment.';
+
+    // Savings Locks - Specific "Wait" Handling
+    if (message.includes('lock not expired')) {
+      const waitMatch = message.match(/wait\s+(.+)\./);
+      const waitTime = waitMatch ? waitMatch[1] : '';
+      return `⏳ *Not Yet!*\nThis lock is still active.${waitTime ? `\nWait ${waitTime}.` : ''}`;
     }
-    
+    if (message.includes('already withdrawn')) {
+      return '❌ *Already Withdrawn*\nThis lock has already been withdrawn.';
+    }
+
+    // Inputs
+    if (message.includes('invalid address') || message.includes('resolver')) {
+      return '❌ *Invalid Details*\nPlease check the phone number or address.';
+    }
+    if (message.includes('interval')) {
+      return '❌ *Invalid Time Format*\nTry: "weekly", "every 5 minutes", "daily".';
+    }
+    if (message.includes('duration')) {
+      return '❌ *Invalid Duration*\nTry: "lock 10 for 5 minutes" or "lock 10 for 1 week".';
+    }
+
+    // Network
+    if (message.includes('network') || message.includes('rpc') || message.includes('timeout') || message.includes('call revert exception')) {
+      return '⚠️ *Network Hiccup*\nThe blockchain is a bit busy. Please try again in 30 seconds.';
+    }
     if (message.includes('gas') || message.includes('fee')) {
-      return '❌ Transaction failed due to gas issues. Please try again.';
+      return '⛽ *Gas Error*\nPlease try again.';
     }
-    
-    if (message.includes('not a member')) {
-      return '❌ You are not a member of this group treasury.';
+
+    // Catch-all
+    if (message.includes('undefined') || message.includes('cannot read properties')) {
+      return '🤔 *I didn\'t catch that*\nCould you double check the command? Type *help* for examples.';
     }
-    
-    if (message.includes('already voted')) {
-      return 'ℹ️ You have already voted on this proposal.';
-    }
-    
-    if (message.includes('proposal not found')) {
-      return '❌ Proposal not found. Please check the proposal ID.';
-    }
-    
-    if (message.includes('treasury not deployed')) {
-      return '❌ No treasury exists for this group. Type "create treasury" to set one up.';
-    }
-    
-    // Default error message
-    return `❌ Error: ${error.message}`;
+
+    // Default fallback - Show first 50 chars of error for debugging
+    return `❌ *Something went wrong*\n_${error.message.substring(0, 50)}..._`;
   }
-  
-  return '❌ An unexpected error occurred. Please try again.';
+
+  return '❌ *System Error*\nPlease try again later.';
 }
 
 /**
@@ -76,4 +85,3 @@ export async function handleAsyncError(fn, errorMessage = 'Operation failed') {
     throw new Error(errorMessage);
   }
 }
-
