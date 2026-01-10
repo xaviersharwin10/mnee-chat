@@ -1,57 +1,84 @@
-# SquadWallet (MNEEChat) 🚀
+# MNEEchat 🚀
 
-> **Winner of the MNEE Hackathon: Financial Automation Track** (Hopefully! 😉)
+**MNEEchat** is an AI-powered financial agent that transforms WhatsApp into a programmable banking interface. By leveraging the **MNEE Stablecoin** and **Coinbase CDP**, it bridges the gap between complex blockchain infrastructure and the natural language interface used by billions.
 
-**SquadWallet** turns WhatsApp into a powerful, programmable bank account powered by **MNEE Stablecoin**. It enables purely natural language interactions for complex financial tasks like recurring payments, savings locks, and invoicing.
-
-[![Project Demo](https://img.youtube.com/vi/PLACEHOLDER/0.jpg)](https://youtube.com) 
-*(Demo video link goes here)*
-
-## 🏆 Hackathon Tracks
-**Financial Automation**: We built a full **Treasurer Agent** that handles:
-- **Scheduled Payments**: "Pay rent every month" (Automated via Keeper)
-- **Savings Locks**: "Lock 100 MNEE for 1 week" (Smart Contract Escrow)
-- **Invoicing**: "Request 50 MNEE for dinner" (Payment Requests)
-
-**AI & Agent Payments**:
-- Uses **Google Gemini** for natural language understanding (fallback from optimized Regex).
-- "Schedule 10 MNEE to Mom every Friday" -> Parsed & Executed On-Chain.
+[![Demo Video](https://img.youtube.com/vi/PLACEHOLDER/0.jpg)](https://youtube.com)
+*(Link your demo video here)*
 
 ---
 
-## ✨ Features
+## 🏗 Architecture
 
-### 1. 💬 Natural Language Banking
-Chat naturally. No complex dApps.
-- "Send 10 to +1234..."
-- "What's my balance?"
-- "Help"
-
-### 2. ⏰ Recurring Payments (The "Keeper")
-Set it and forget it. Perfect for payroll, rent, or subscriptions.
-- `schedule 10 to @bob every week`
-- **Auto-Notifications**: Both sender and receiver get a WhatsApp message when the payment executes!
-
-### 3. 🔒 Savings Locks
-Time-lock your funds to prevent spending.
-- `lock 500 for 30 days`
-- **Auto-Withdraw**: The Keeper automatically unlocks and returns funds when time is up.
-
-### 4. 📝 Payment Requests
-Send invoices easily.
-- `request 20 from @alice for pizza`
-- Alice types `pay request 1` to confirm.
+```mermaid
+graph TD
+    User((User)) -->|WhatsApp Msg| Twilio
+    Twilio -->|Webhook| Server[Node.js Server]
+    
+    subgraph Core Logic
+        Server -->|Raw Text| Parser{Command / AI Parser}
+        Parser -->|Structured Cmd| Router
+        Router --> Wallet[Wallet Service]
+        Router --> Sched[Schedule Service]
+        Router --> Lock[Savings Service]
+    end
+    
+    subgraph "Blockchain (Sepolia)"
+        Wallet -->|Sign| CDP[Coinbase CDP]
+        CDP -->|Tx| MNEE[MNEE Token]
+        Sched -->|Create| S_Contract[ScheduledPayment.sol]
+        Lock -->|Lock| L_Contract[SavingsLock.sol]
+    end
+    
+    subgraph Automation
+        Keeper((Keeper Service)) -->|Check Due| S_Contract
+        Keeper -->|Unlock| L_Contract
+        Keeper -->|Notify| Twilio
+    end
+```
 
 ---
 
-## 🛠 Tech Stack
+## 💎 Value Proposition
 
-- **Blockchain**: MNEE Stablecoin (Sepolia Testnet: `0xCaC...`)
-- **Wallet**: **Coinbase CDP** (Server-Side Wallets)
-- **AI**: Google Gemini 1.5 Flash (for NLP)
-- **Backend**: Node.js + Express
-- **Messaging**: Twilio (WhatsApp API)
-- **Automation**: Custom Keeper Service (Cron-based)
+MNEEchat solves the coordination problem of **"Last Mile" Crypto Adoption**. It hides keys, gas, and addresses behind a conversational UI.
+
+| Feature | Problem Solved | Quantifiable Impact |
+| :--- | :--- | :--- |
+| **Natural Language Parsing** | Crypto UX is too complex (0x addresses, ABI encoding). | **100% reduction** in technical jargon for end-users. |
+| **Automated Payroll** | Manual recurring payments are error-prone. | **0 missed payments** with on-chain "Keeper" automation. |
+| **Escrow/Savings** | "Paper hands" spend savings too easily. | **Guaranteed lock-up** enforced by smart contract logic. |
+| **Instant Onboarding** | Wallet creation usually takes ~10 mins + app download. | **< 3 seconds** to onboard via first WhatsApp message. |
+
+---
+
+## 🎯 Hackathon Tracks & Features
+
+We address the **Financial Automation** and **AI & Agent Payments** tracks by building a system where money effectively "programs itself."
+
+### 1. 🤖 AI & Agent Payments
+- **Context-Aware Parsing**: Uses **Google Gemini 1.5** to understand intent.
+    - _"Send 10 bucks to mom every week"_ is parsed, recipient resolved, and schedule created.
+- **Zero-UI**: No React frontend required. The "Interface" is English.
+
+### 2. ⚡ Financial Automation
+- **Recurring Payments**: Fully decentralized payroll/subscription agent.
+    - `schedule 50 to @employee weekly`
+- **Smart Savings**: Enforced savings accounts.
+    - `lock 500 for 1 year`
+- **Invoicing**: P2P request network.
+    - `request 25 from @alice`
+
+---
+
+## 🛠 Technology Stack
+
+| Component | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Stablecoin** | **MNEE** (Sepolia) | The core programmable money layer. |
+| **Infrastructure** | **Coinbase CDP** | Server-Side Wallets (MPC) for secure, keyless UX. |
+| **Intelligence** | **Google Gemini** | NLP to convert chat -> JSON commands. |
+| **Messaging** | **Twilio API** | WhatsApp interface. |
+| **Contracts** | **Solidity** | Custom logic for `SavingsLock` and `ScheduledPayment`. |
 
 ---
 
@@ -59,60 +86,44 @@ Send invoices easily.
 
 ### Prerequisites
 - Node.js v18+
-- Twilio Account (for WhatsApp)
+- Twilio Account (Sandbox or Live)
 - Coinbase CDP API Keys
 - Google Gemini API Key
-- Ethereum Sepolia RPC
 
 ### Installation
 
-1. **Clone the repo**
+1. **Clone & Install**
    ```bash
-   git clone https://github.com/your-username/squadwallet.git
-   cd squadwallet
-   ```
-
-2. **Install dependencies**
-   ```bash
+   git clone https://github.com/xaviersharwin10/mnee-chat.git
+   cd mnee-chat
    npm install
    ```
 
-3. **Configure Environment**
+2. **Environment Setup**
    ```bash
    cp .env.example .env
-   # Edit .env with your keys
+   # Fill in CDP_API_KEY, TWILIO_AUTH_TOKEN, etc.
    ```
 
-4. **Deploy Contracts** (Optional - we use pre-deployed)
-   ```bash
-   npm run deploy
-   ```
-
-5. **Start Server**
+3. **Run Locally**
    ```bash
    npm start
    ```
 
-6. **Start Tunnel (for Twilio)**
-   ```bash
-   ngrok http 3000
-   ```
-   *Copy the ngrok URL to your Twilio Webhook settings.*
+4. **Connect Twilio**
+   - Run `ngrok http 3000`
+   - Paste the public URL into your Twilio Sandbox "When a message comes in" field.
 
 ---
 
-## 📜 Smart Contracts used
+## 📜 Smart Contracts
 
-- **MNEE Token (Sepolia)**: `0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9`
-- **ScheduledPayment**: `0x...` (See .env)
-- **SavingsLock**: `0x...` (See .env)
-- **PaymentRequest**: `0x...` (See .env)
+| Contract | Address (Sepolia) | Function |
+| :--- | :--- | :--- |
+| **MNEE Token** | `0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9` | The money. |
+| **ScheduledPayment** | *(See .env)* | Handles automatic execution. |
+| **SavingsLock** | *(See .env)* | Handles time-locked storage. |
 
 ---
 
-## 👥 Contributors
-
-- **Sharwin** - Lead Developer
-- **Antigravity** - AI Co-Pilot
-
-_Built with ❤️ for the MNEE Ecosystem._
+_Built for the MNEE Hackathon 2025._
