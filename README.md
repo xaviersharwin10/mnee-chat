@@ -9,45 +9,51 @@
 
 ## 🏗 Architecture
 
+## 🏗 System Architecture
+
+The following sequence demonstrates how a single natural language message translates into verified on-chain value movement, powered by **Coinbase CDP**.
+
 ```mermaid
-graph TD
-    User((User)) -->|WhatsApp Msg| Twilio
-    Twilio -->|Webhook| Server[Node.js Server]
+sequenceDiagram
+    participant User as 👤 User (WhatsApp)
+    participant Twilio as 💬 Twilio
+    participant Server as ⚙️ MNEEchat Server
+    participant CDP as 🛡️ Coinbase CDP (MPC)
+    participant Chain as ⛓️ MNEE (Sepolia)
+
+    User->>Twilio: "Send 10 MNEE to @Alice"
+    Twilio->>Server: Webhook (Text)
     
-    subgraph Core Logic
-        Server -->|Raw Text| Parser{Command / AI Parser}
-        Parser -->|Structured Cmd| Router
-        Router --> Wallet[Wallet Service]
-        Router --> Sched[Schedule Service]
-        Router --> Lock[Savings Service]
+    rect rgb(30, 30, 30)
+        Note over Server: 🧠 NLP Processing
+        Server->>Server: Parse Intent & Resolve @Alice
     end
     
-    subgraph "Blockchain (Sepolia)"
-        Wallet -->|Sign| CDP[Coinbase CDP]
-        CDP -->|Tx| MNEE[MNEE Token]
-        Sched -->|Create| S_Contract[ScheduledPayment.sol]
-        Lock -->|Lock| L_Contract[SavingsLock.sol]
-    end
+    Server->>CDP: Request Transaction
+    Note right of Server: "Sign transfer(Alice, 10) with Sender's MPC Key"
     
-    subgraph Automation
-        Keeper((Keeper Service)) -->|Check Due| S_Contract
-        Keeper -->|Unlock| L_Contract
-        Keeper -->|Notify| Twilio
-    end
+    CDP->>Chain: Broadcast Signed Tx
+    Chain-->>CDP: Tx Hash (0x123...)
+    CDP->>Server: Success Response
+    
+    Server->>Twilio: "✅ Sent! Hash: 0x123..."
+    Twilio->>User: Confirmation Message
 ```
 
 ---
 
-## 💎 Value Proposition
+## � Driving MNEE Adoption: The "Frictionless" Thesis
 
-MNEEchat solves the coordination problem of **"Last Mile" Crypto Adoption**. It hides keys, gas, and addresses behind a conversational UI.
+MNEEchat is built on a single core thesis: **Adoption follows Convenience.**
 
-| Feature | Problem Solved | Quantifiable Impact |
+Current crypto adoption is stalled by "Wallet Friction": Seed phrases, gas fees, and complex UIs. MNEEchat removes these barriers completely, directly impacting MNEE's velocity and TVL.
+
+| Adoption Barrier | The MNEEchat Solution | Benefit to MNEE Protocol |
 | :--- | :--- | :--- |
-| **Natural Language Parsing** | Crypto UX is too complex (0x addresses, ABI encoding). | **100% reduction** in technical jargon for end-users. |
-| **Automated Payroll** | Manual recurring payments are error-prone. | **0 missed payments** with on-chain "Keeper" automation. |
-| **Escrow/Savings** | "Paper hands" spend savings too easily. | **Guaranteed lock-up** enforced by smart contract logic. |
-| **Instant Onboarding** | Wallet creation usually takes ~10 mins + app download. | **< 3 seconds** to onboard via first WhatsApp message. |
+| **Onboarding Latency** | **Zero-Step Onboarding**: Accounts are created instantly upon first message via Coinbase CDP. | **Higher User Velocity**: Users can receive MNEE before they even know what a wallet is. |
+| **UX Complexity** | **Natural Language**: "Send 10" replaces `transfer(0x...)`. | **Mass Market Access**: Unlocks demographics (older/non-tech) who use WhatsApp but not Metamask. |
+| **Merchant Resistance** | **Instant Invoices**: "Request 50 from Client" creates a payable link/action. | **Commercial Utility**: Transforms MNEE from "speculative asset" to "business tool". |
+| **Stagnant TVL** | **Programmable Savings**: "Lock MNEE" prevents selling/spending. | **Sticky Liquidity**: Encourages holding MNEE for long-term goals (savings/escrow). |
 
 ---
 
