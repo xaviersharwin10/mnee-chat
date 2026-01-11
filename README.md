@@ -5,10 +5,19 @@
 > *"Send 50 MNEE to +919876543210"* — That's it. Done in 3 seconds.
 
 [![Demo Video](https://img.shields.io/badge/▶_Watch_Demo-YouTube-red?style=for-the-badge)](https://youtube.com)
+[![Try on WhatsApp](https://img.shields.io/badge/💬_Try_Now-WhatsApp-25D366?style=for-the-badge)](https://wa.me/14155238886?text=join%20depth-army)
 
 ---
 
-## 💡 The Problem We Solve
+## � Try It Now!
+
+1. **Click here**: [Open WhatsApp Bot](https://wa.me/14155238886?text=join%20depth-army)
+2. **Send**: `join depth-army` (to activate sandbox)
+3. **Then text**: `Hi` to get started!
+
+---
+
+## �💡 The Problem We Solve
 
 **2 billion people** use WhatsApp daily. Yet sending crypto still requires:
 - Downloading apps 📱
@@ -17,6 +26,19 @@
 - Managing 0x... addresses 😵
 
 **MNEEchat eliminates ALL of this.** Your phone number IS your wallet.
+
+---
+
+## 🎯 Value Proposition: How MNEEchat Drives MNEE Adoption
+
+| User Persona | Real-World Scenario | Quantifiable Impact on MNEE |
+| :--- | :--- | :--- |
+| 👨‍👩‍👧 **The Parent (Raj)** | Sends monthly allowance to his daughter abroad. No FX fees, no bank visits—just texts "send 5000 to +1..." | **Network Growth**: Every cross-border send onboards a new MNEE user. 1 user → 5 recipients → viral adoption loop. |
+| 👵 **The Grandmother (Lakshmi)** | 72 years old. Never used crypto. Types "send 100 to grandson" and it works. | **Demographic Expansion**: MNEE reaches 60+ age group for the first time. Previously impossible market = unlocked. |
+| 🏪 **The Shopkeeper (Ahmed)** | Creates invoices via WhatsApp. "request 250 from +91...". Gets paid instantly. | **Daily Volume**: Every merchant becomes a MNEE payment terminal. 100 shops × 10 tx/day = 1000 daily MNEE transactions. |
+| 💼 **The Employer (Priya)** | Sets up "schedule 5000 to +91... monthly" for domestic help salary. | **Recurring TVL**: Automated payments = predictable MNEE velocity. Locked allowances = guaranteed monthly on-chain activity. |
+| 🎓 **The Student (Arjun)** | Locks 1000 MNEE for 6 months to save for a laptop. | **TVL Growth**: Smart contract locks = MNEE held off exchanges. Higher TVL = healthier token economics. |
+| 📈 **MNEE Protocol** | Every user sends to multiple non-users who then onboard. | **Viral Coefficient >1**: Each user creates 5+ new wallets. MNEE becomes the default stablecoin for WhatsApp's 2B users. |
 
 ---
 
