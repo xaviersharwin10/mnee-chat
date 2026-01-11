@@ -56,6 +56,29 @@ app.get('/api/wallet/:phone', async (req, res) => {
   }
 });
 
+// API: Faucet - Dispense test tokens
+app.post('/api/faucet', async (req, res) => {
+  try {
+    const { phone } = req.body;
+    if (!phone) {
+      return res.status(400).json({ error: 'Phone number is required' });
+    }
+
+    const { dispenseFaucet } = await import('./mneeService.js');
+    const txHash = await dispenseFaucet(phone);
+
+    res.json({
+      success: true,
+      message: '100 Test MNEE sent!',
+      txHash
+    });
+  } catch (error) {
+    console.error('Faucet API error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 // API: Notify recipient of transfer (called by frontend after successful tx)
 app.post('/api/notify-transfer', async (req, res) => {
   try {

@@ -213,6 +213,31 @@ function SendToPhone() {
               → {derivedAddress}
             </div>
           )}
+
+          <button
+            className="btn btn-secondary faucet-btn"
+            onClick={async () => {
+              if (!phone) return alert('Please enter a phone number first');
+              try {
+                const res = await fetch(`${API_BASE}/api/faucet`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ phone })
+                });
+                const data = await res.json();
+                if (data.success) {
+                  setStatus({ type: 'success', message: '💰 100 Test MNEE Sent!', txHash: data.txHash });
+                } else {
+                  alert('Faucet failed: ' + data.error);
+                }
+              } catch (e) {
+                alert('Faucet error');
+              }
+            }}
+            style={{ marginTop: '8px', fontSize: '0.8rem', padding: '4px 12px' }}
+          >
+            🚰 Get Test Tokens
+          </button>
         </div>
 
         {/* Send Type Toggle */}
