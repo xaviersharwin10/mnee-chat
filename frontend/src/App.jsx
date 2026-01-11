@@ -114,6 +114,18 @@ function SendToPhone() {
         message: `Sent ${amount} ETH (gas) to ${phone}`,
         txHash: ethHash,
       });
+
+      // Notify recipient via WhatsApp
+      fetch(`${API_BASE}/api/notify-transfer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          toPhone: phone,
+          amount: `${amount} ETH (gas)`,
+          txHash: ethHash,
+        }),
+      }).catch(err => console.log('Notification failed:', err));
+
       setAmount('');
       ethReset();
     }
