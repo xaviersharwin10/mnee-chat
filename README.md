@@ -213,8 +213,6 @@ Ensure your `PRIVATE_KEY` wallet has mainnet ETH for gas fees.
 | **PaymentRequest** | `0xc03EAEA9D7D16262327e018243526DaB5aaCDf11` | [Etherscan →](https://sepolia.etherscan.io/address/0xc03EAEA9D7D16262327e018243526DaB5aaCDf11) |
 | **SavingsLock** | `0xE87659941573D830A0D04F58e8fe18D4fa455e0a` | [Etherscan →](https://sepolia.etherscan.io/address/0xE87659941573D830A0D04F58e8fe18D4fa455e0a) |
 
-> **Note**: MockMNEE has 6 decimals (same as real MNEE) for accurate testing.
-
 ---
 
 ## 🛠 Technology Stack
