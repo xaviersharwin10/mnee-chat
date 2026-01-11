@@ -95,18 +95,20 @@ sequenceDiagram
 ### 🔒 Savings Locks
 | Command | Example | What it does |
 |---------|---------|--------------|
-| Lock funds | `lock 1000 for 30 days` | Time-locks 1000 MNEE |
-| Lock (hours) | `lock 500 for 2 hours` | Locks for 2 hours |
-| Lock (minutes) | `lock 50 for 10 minutes` | Locks for 10 minutes |
+| **Quick test** | `lock 10 for 2 minutes` | ⭐ Locks for 2 mins — test fast! |
+| Lock (minutes) | `lock 50 for 5 minutes` | Locks for 5 minutes |
+| Lock (hours) | `lock 100 for 1 hour` | Locks for 1 hour |
+| Lock (days) | `lock 1000 for 30 days` | Time-locks 1000 MNEE |
 | View locks | `my locks` | Lists all your locks |
 | Withdraw | `unlock 1` | Withdraws expired lock #1 |
 
 ### ⏰ Recurring Payments
 | Command | Example | What it does |
 |---------|---------|--------------|
-| Weekly payment | `schedule 200 to +919876543210 weekly` | Auto-pays every week |
-| Daily payment | `schedule 10 to +919876543210 daily` | Auto-pays every day |
-| Custom interval | `schedule 5 to +919876543210 every 1 hour` | Auto-pays hourly |
+| **Quick test** | `schedule 1 to +919876543210 every 2 minutes` | ⭐ Runs every 2 mins — test fast! |
+| Hourly | `schedule 5 to +919876543210 every 1 hour` | Auto-pays every hour |
+| Daily | `schedule 10 to +919876543210 daily` | Auto-pays every day |
+| Weekly | `schedule 200 to +919876543210 weekly` | Auto-pays every week |
 | View schedules | `my schedules` | Lists active auto-pays |
 | Cancel schedule | `cancel schedule 1` | Stops auto-pay #1 |
 
