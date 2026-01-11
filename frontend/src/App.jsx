@@ -9,7 +9,7 @@ import { parseUnits } from 'viem';
 import './App.css';
 
 // Configuration
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://mnee-chat-production.up.railway.app';
 const TOKEN_ADDRESS = '0x7650906b48d677109F3C20C6B3B89eB0b793c63b'; // MockMNEE Sepolia
 const ETHERSCAN_BASE = 'https://sepolia.etherscan.io';
 
