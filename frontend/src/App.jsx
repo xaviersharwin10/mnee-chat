@@ -168,6 +168,26 @@ function SendToPhone() {
           <h1 className="logo">MNEE<span>Chat</span></h1>
         </div>
         <p className="tagline">Send MNEE or Gas to any phone number</p>
+        <a
+          href="https://wa.me/14155238886?text=join%20depth-army"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            marginTop: '12px',
+            color: '#25D366',
+            textDecoration: 'none',
+            fontWeight: '600',
+            background: 'rgba(37, 211, 102, 0.1)',
+            padding: '8px 16px',
+            borderRadius: '20px',
+            border: '1px solid rgba(37, 211, 102, 0.2)'
+          }}
+        >
+          <span>💬</span> Chat on WhatsApp
+        </a>
       </header>
 
       <div className="card">
