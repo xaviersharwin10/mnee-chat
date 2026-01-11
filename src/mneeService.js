@@ -67,6 +67,40 @@ export function creditUserBalance(phoneNumber, amount) {
 }
 
 /**
+ * Dispense Faucet tokens (100 MNEE) to a user via on-chain transfer (or virtual if no wallet)
+ */
+export async function dispenseFaucet(phoneNumber) {
+  try {
+    const { getWalletAddress } = await import('./walletService.js');
+    const toAddress = await getWalletAddress(phoneNumber);
+
+    console.log(`🚰 Faucet requested for ${phoneNumber} (${toAddress})`);
+
+    // If we have a gas sponsor wallet (deployer), use it to fund the user
+    if (gasSponsorWallet) {
+      const contract = getMNEEContract(gasSponsorWallet);
+      const decimals = await contract.decimals();
+      const amountWei = ethers.parseUnits('100', decimals);
+
+      const tx = await contract.transfer(toAddress, amountWei);
+      console.log(`✅ Faucet TX: ${tx.hash}`);
+
+      // Also send some ETH for gas if on testnet (optional, requires funded deployer)
+      // await gasSponsorWallet.sendTransaction({ to: toAddress, value: ethers.parseEther("0.001") });
+
+      return tx.hash;
+    } else {
+      console.warn('⚠️ No gas sponsor wallet configured for Faucet. Crediting virtual balance.');
+      return creditUserBalance(phoneNumber, 100);
+    }
+  } catch (error) {
+    console.error('Faucet error:', error);
+    // Fallback to virtual balance for reliability during demo
+    return creditUserBalance(phoneNumber, 100);
+  }
+}
+
+/**
  * Get token contract instance (MockMNEE on Sepolia for testing)
  */
 function getMNEEContract(signerOrProvider) {

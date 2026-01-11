@@ -26,6 +26,11 @@ export function parseCommand(message) {
     return { type: 'DEPOSIT_INFO' };
   }
 
+  // Faucet
+  if (text === 'faucet' || text === 'get money' || text.includes('gimme money')) {
+    return { type: 'FAUCET' };
+  }
+
   // Interactive Button: "Send Money"
   if (text === 'send money' || text === '💸 send money') {
     return { type: 'SEND_HELP' };

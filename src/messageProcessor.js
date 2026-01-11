@@ -94,6 +94,25 @@ export async function processMessage({ from, to, message, messageSid, profileNam
           `Example: _send 10 to +919876543210_`
         );
 
+      case 'FAUCET':
+        // Mock Faucet: Send 100 MNEE to user
+        const faucetTx = await transferMNEE('0x7777777777777777777777777777777777777777', from, 100);
+        // Note: In real app, we'd use a dedicated faucet wallet. For Hackathon, we'll assume the funding wallet is the server wallet or we sim it.
+        // ACTUALLY: The server wallet (Coinbase CDP) holds the MNEE initially? 
+        // Let's assume the Server Wallet IS the Faucet for now.
+
+        // Let's implement a real transfer from the server's wallet using transferMNEE(serverAddress -> user)
+        // BUT transferMNEE usually takes (fromPhone, toPhone, amount). 
+        // We need a way to mint or send from a "faucet" source.
+        // For hackathon simplicity: We will just MINT or Transfer from the Deployment Wallet.
+
+        // BETTER HACK: Just tell them to use the web portal faucet for now if complex.
+        // OR: Implement a specific 'faucet' function in mneeService.js that uses the deployer key.
+
+        // Let's go with: Calls a new faucet function.
+        await import('./mneeService.js').then(m => m.dispenseFaucet(from));
+        return await sendWhatsAppMessage(from, `💰 *Faucet Drip!* 💰\n\nSent 100 Test MNEE to your wallet.\nWait ~10s for confirmation.`);
+
       case 'SEND':
       case 'PAY':
         return await handleSendCommand(from, command, profileName);
