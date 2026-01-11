@@ -234,9 +234,19 @@ function SendToPhone() {
                 alert('Faucet error');
               }
             }}
-            style={{ marginTop: '8px', fontSize: '0.8rem', padding: '4px 12px' }}
+            style={{
+              marginTop: '12px',
+              width: '100%',
+              padding: '12px',
+              fontSize: '1rem',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px'
+            }}
           >
-            🚰 Get Test Tokens
+            🚰 Get 100 Test MNEE Tokens
           </button>
         </div>
 
