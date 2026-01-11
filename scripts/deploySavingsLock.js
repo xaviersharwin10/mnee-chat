@@ -1,35 +1,29 @@
-import pkg from "hardhat";
-const { ethers } = pkg;
-import dotenv from "dotenv";
-
-dotenv.config();
+import hre from "hardhat";
 
 async function main() {
-    console.log("🚀 Deploying SavingsLock contract...");
+    console.log("🚀 Deploying SavingsLock to Sepolia...\n");
 
-    const [deployer] = await ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
     console.log("Deploying with account:", deployer.address);
-    console.log("Account balance:", (await ethers.provider.getBalance(deployer.address)).toString());
 
-    // Token address (PyUSD on Sepolia)
-    const TOKEN_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS || "0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9";
+    const balance = await hre.ethers.provider.getBalance(deployer.address);
+    console.log("Account balance:", hre.ethers.formatEther(balance), "ETH\n");
 
-    console.log("\n📋 Deployment Parameters:");
-    console.log("Token Address:", TOKEN_ADDRESS);
+    // MockMNEE token address on Sepolia
+    const TOKEN_ADDRESS = "0x7650906b48d677109F3C20C6B3B89eB0b793c63b";
 
-    // Deploy contract
-    const SavingsLock = await ethers.getContractFactory("SavingsLock");
+    // Deploy SavingsLock
+    const SavingsLock = await hre.ethers.getContractFactory("SavingsLock");
     const savingsLock = await SavingsLock.deploy(TOKEN_ADDRESS);
-
     await savingsLock.waitForDeployment();
-    const contractAddress = await savingsLock.getAddress();
 
-    console.log("\n✅ SavingsLock deployed to:", contractAddress);
-    console.log("View on Etherscan: https://sepolia.etherscan.io/address/" + contractAddress);
+    const address = await savingsLock.getAddress();
+    console.log("✅ SavingsLock deployed to:", address);
+    console.log("\n📋 Add this to your .env:");
+    console.log(`SAVINGS_LOCK_ADDRESS=${address}`);
 
-    // Output for .env
-    console.log("\n📝 Add to .env:");
-    console.log(`SAVINGS_LOCK_ADDRESS=${contractAddress}`);
+    console.log("\n🔗 View on Etherscan:");
+    console.log(`https://sepolia.etherscan.io/address/${address}`);
 }
 
 main()
