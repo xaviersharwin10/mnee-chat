@@ -20,7 +20,9 @@ Follow these steps to fully test the application on **Sepolia Testnet** (using M
 ### Step 2: Get Test Tokens (Faucet) 🚰
 You need **MockMNEE** tokens to use the bot.
 *   **Option A (Easiest)**: Text `faucet` to the bot. It will send 100 MNEE to your derived wallet.
-*   **Option B (Web)**: Go to **[mnee-chat.vercel.app](https://mnee-chat.vercel.app)**, enter your phone number, and click `🚰 Get 100 Test MNEE Tokens`.
+*   **Option B (Web)**: Go to **[mnee-chat.vercel.app](https://mnee-chat.vercel.app)**:
+    *   **To Wallet**: Connect wallet -> Click `🚰 Get 100 Test MNEE (to Wallet)`
+    *   **To Phone**: Enter number -> Click `🚰 Get Test MNEE to this Phone`
 
 ### Step 3: Test Core Features ⚡
 Try these commands in WhatsApp:
