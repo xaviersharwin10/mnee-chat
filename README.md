@@ -2,6 +2,8 @@
 
 **WhatsApp Payments Powered by MNEE** — *Send stablecoins as easily as a text message.*
 
+MNEEchat turns WhatsApp into a programmable banking interface powered by MNEE. It removes all crypto friction (seed phrases, gas fees, addresses) by using Coinbase CDP for server-side MPC wallets and Google Gemini to parse natural language commands (e.g., "send 50 to mom"). Features include instant P2P transfers, payment requests, savings time-locks, and automated recurring payments—all via WhatsApp text or the web portal.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
