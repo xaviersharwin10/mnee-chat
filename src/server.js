@@ -52,6 +52,33 @@ app.get('/api/wallet/:phone', async (req, res) => {
   }
 });
 
+// API: Notify recipient of transfer (called by frontend after successful tx)
+app.post('/api/notify-transfer', async (req, res) => {
+  try {
+    const { toPhone, amount, txHash, fromAddress } = req.body;
+
+    if (!toPhone || !amount) {
+      return res.status(400).json({ error: 'Missing toPhone or amount' });
+    }
+
+    const phone = toPhone.replace(/[^\d]/g, '');
+
+    // Send WhatsApp notification to recipient
+    await sendWhatsAppMessage(
+      phone,
+      `💰 *You received ${amount} MNEE!*\n\n` +
+      `From: ${fromAddress ? fromAddress.slice(0, 8) + '...' : 'External Wallet'}\n\n` +
+      (txHash ? `🔗 https://sepolia.etherscan.io/tx/${txHash}\n\n` : '') +
+      `Type *balance* to check your funds!`
+    );
+
+    res.json({ success: true, message: 'Notification sent' });
+  } catch (error) {
+    console.error('Notify error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Serve main page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));

@@ -85,6 +85,18 @@ function SendToPhone() {
         message: `Sent ${amount} MNEE to ${phone}`,
         txHash: hash,
       });
+
+      // Notify recipient via WhatsApp
+      fetch(`${API_BASE}/api/notify-transfer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          toPhone: phone,
+          amount: amount,
+          txHash: hash,
+        }),
+      }).catch(err => console.log('Notification failed:', err));
+
       setAmount('');
       reset();
     }
