@@ -36,7 +36,7 @@ const ERC20_ABI = [
 ];
 
 function SendToPhone() {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [sendType, setSendType] = useState('mnee'); // 'mnee' or 'gas'
@@ -131,6 +131,28 @@ function SendToPhone() {
     }
   }, [ethConfirmed, ethHash]);
 
+  const handleFaucet = async (targetType) => {
+    const target = targetType === 'wallet' ? address : phone;
+    if (!target) return alert(targetType === 'wallet' ? 'Please connect wallet first' : 'Please enter a phone number first');
+
+    try {
+      const payload = targetType === 'wallet' ? { address: target } : { phone: target };
+      const res = await fetch(`${API_BASE}/api/faucet`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus({ type: 'success', message: `💰 100 Test MNEE Sent to ${targetType === 'wallet' ? 'Wallet' : 'Phone'}!`, txHash: data.txHash });
+      } else {
+        alert('Faucet failed: ' + data.error);
+      }
+    } catch (e) {
+      alert('Faucet error');
+    }
+  };
+
   const handleSend = async () => {
     if (!derivedAddress || !amount) return;
 
@@ -191,8 +213,26 @@ function SendToPhone() {
       </header>
 
       <div className="card">
-        <div className="connect-section">
+        <div className="connect-section" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <ConnectButton showBalance={false} />
+
+          {/* Wallet Faucet Button - Only shown when connected */}
+          {isConnected && (
+            <button
+              className="btn btn-secondary"
+              onClick={() => handleFaucet('wallet')}
+              style={{
+                width: '100%',
+                padding: '8px',
+                fontSize: '0.9rem',
+                background: 'rgba(37, 211, 102, 0.1)',
+                color: '#25D366',
+                border: '1px solid rgba(37, 211, 102, 0.2)'
+              }}
+            >
+              🚰 Get 100 Test MNEE to Wallet
+            </button>
+          )}
         </div>
 
         <div className="form-group">
@@ -214,47 +254,16 @@ function SendToPhone() {
             </div>
           )}
 
-          <button
-            className="btn btn-secondary faucet-btn"
-            onClick={async () => {
-              // Prioritize connected address, then phone input
-              const target = isConnected && address ? address : phone;
-
-              if (!target) return alert('Please enter a phone number or connect wallet first');
-
-              try {
-                // Determine payload based on what we have
-                const payload = (isConnected && address) ? { address } : { phone };
-
-                const res = await fetch(`${API_BASE}/api/faucet`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                if (data.success) {
-                  setStatus({ type: 'success', message: '💰 100 Test MNEE Sent to ' + (payload.address ? 'Wallet' : 'Phone') + '!', txHash: data.txHash });
-                } else {
-                  alert('Faucet failed: ' + data.error);
-                }
-              } catch (e) {
-                alert('Faucet error');
-              }
-            }}
-            style={{
-              marginTop: '12px',
-              width: '100%',
-              padding: '12px',
-              fontSize: '1rem',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px'
-            }}
-          >
-            🚰 Get 100 Test MNEE {isConnected ? '(to Wallet)' : '(to Phone)'}
-          </button>
+          {/* Phone Faucet Button - Only shown if phone entered and NOT using wallet faucet */}
+          {!isConnected && phone.length > 5 && (
+            <button
+              className="btn btn-secondary"
+              onClick={() => handleFaucet('phone')}
+              style={{ marginTop: '8px', padding: '6px', fontSize: '0.8rem', width: '100%' }}
+            >
+              🚰 Get Test MNEE to this Phone
+            </button>
+          )}
         </div>
 
         {/* Send Type Toggle */}
