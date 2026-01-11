@@ -137,12 +137,12 @@ function SendToPhone() {
         </div>
 
         <div className="form-group">
-          <label>Phone Number</label>
+          <label>Phone Number (with +country code)</label>
           <input
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="+91 9876543210"
+            placeholder="+919876543210"
           />
           {isLoadingAddress && (
             <div className="derived-address" style={{ opacity: 0.6 }}>
