@@ -4,8 +4,8 @@ import { WagmiProvider } from 'wagmi';
 import { sepolia, mainnet } from 'wagmi/chains';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { parseUnits } from 'viem';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSendTransaction } from 'wagmi';
+import { parseUnits, parseEther } from 'viem';
 import './App.css';
 
 // Configuration
@@ -39,6 +39,7 @@ function SendToPhone() {
   const { isConnected } = useAccount();
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
+  const [sendType, setSendType] = useState('mnee'); // 'mnee' or 'gas'
   const [status, setStatus] = useState({ type: '', message: '' });
   const [derivedAddress, setDerivedAddress] = useState(null);
   const [isLoadingAddress, setIsLoadingAddress] = useState(false);
@@ -72,18 +73,21 @@ function SendToPhone() {
     return () => clearTimeout(debounce);
   }, [phone]);
 
-  const { data: hash, isPending, writeContract, reset } = useWriteContract();
+  // MNEE Transfer (ERC-20)
+  const { data: mneeHash, isPending: mneePending, writeContract, reset: mneeReset } = useWriteContract();
+  const { isLoading: mneeConfirming, isSuccess: mneeConfirmed } = useWaitForTransactionReceipt({ hash: mneeHash });
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash,
-  });
+  // ETH Transfer (native)
+  const { data: ethHash, isPending: ethPending, sendTransaction, reset: ethReset } = useSendTransaction();
+  const { isLoading: ethConfirming, isSuccess: ethConfirmed } = useWaitForTransactionReceipt({ hash: ethHash });
 
+  // Handle MNEE confirmation
   useEffect(() => {
-    if (isConfirmed && hash) {
+    if (mneeConfirmed && mneeHash) {
       setStatus({
         type: 'success',
         message: `Sent ${amount} MNEE to ${phone}`,
-        txHash: hash,
+        txHash: mneeHash,
       });
 
       // Notify recipient via WhatsApp
@@ -93,14 +97,27 @@ function SendToPhone() {
         body: JSON.stringify({
           toPhone: phone,
           amount: amount,
-          txHash: hash,
+          txHash: mneeHash,
         }),
       }).catch(err => console.log('Notification failed:', err));
 
       setAmount('');
-      reset();
+      mneeReset();
     }
-  }, [isConfirmed, hash]);
+  }, [mneeConfirmed, mneeHash]);
+
+  // Handle ETH confirmation
+  useEffect(() => {
+    if (ethConfirmed && ethHash) {
+      setStatus({
+        type: 'success',
+        message: `Sent ${amount} ETH (gas) to ${phone}`,
+        txHash: ethHash,
+      });
+      setAmount('');
+      ethReset();
+    }
+  }, [ethConfirmed, ethHash]);
 
   const handleSend = async () => {
     if (!derivedAddress || !amount) return;
@@ -108,17 +125,27 @@ function SendToPhone() {
     setStatus({ type: 'pending', message: 'Waiting for confirmation...' });
 
     try {
-      await writeContract({
-        address: TOKEN_ADDRESS,
-        abi: ERC20_ABI,
-        functionName: 'transfer',
-        args: [derivedAddress, parseUnits(amount, 6)],
-      });
+      if (sendType === 'mnee') {
+        await writeContract({
+          address: TOKEN_ADDRESS,
+          abi: ERC20_ABI,
+          functionName: 'transfer',
+          args: [derivedAddress, parseUnits(amount, 6)],
+        });
+      } else {
+        // Send ETH (gas)
+        await sendTransaction({
+          to: derivedAddress,
+          value: parseEther(amount),
+        });
+      }
     } catch (error) {
       setStatus({ type: 'error', message: error.shortMessage || error.message });
     }
   };
 
+  const isPending = sendType === 'mnee' ? mneePending : ethPending;
+  const isConfirming = sendType === 'mnee' ? mneeConfirming : ethConfirming;
   const canSend = isConnected && derivedAddress && amount && parseFloat(amount) > 0 && !isPending && !isConfirming && !isLoadingAddress;
 
   return (
@@ -128,7 +155,7 @@ function SendToPhone() {
           <img src="/logo.png" alt="MNEEChat" className="logo-icon" style={{ width: 48, height: 48 }} />
           <h1 className="logo">MNEE<span>Chat</span></h1>
         </div>
-        <p className="tagline">Send MNEE to any phone number via WhatsApp</p>
+        <p className="tagline">Send MNEE or Gas to any phone number</p>
       </header>
 
       <div className="card">
@@ -156,14 +183,33 @@ function SendToPhone() {
           )}
         </div>
 
+        {/* Send Type Toggle */}
         <div className="form-group">
-          <label>Amount (MNEE)</label>
+          <label>Send Type</label>
+          <div className="toggle-buttons">
+            <button
+              className={`toggle-btn ${sendType === 'mnee' ? 'active' : ''}`}
+              onClick={() => setSendType('mnee')}
+            >
+              💰 MNEE
+            </button>
+            <button
+              className={`toggle-btn ${sendType === 'gas' ? 'active' : ''}`}
+              onClick={() => setSendType('gas')}
+            >
+              ⛽ Gas (ETH)
+            </button>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>Amount ({sendType === 'mnee' ? 'MNEE' : 'ETH'})</label>
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="0.00"
-            step="0.01"
+            placeholder={sendType === 'mnee' ? '100' : '0.01'}
+            step={sendType === 'mnee' ? '1' : '0.001'}
             min="0"
           />
         </div>
@@ -176,7 +222,7 @@ function SendToPhone() {
           {isPending || isConfirming ? (
             <><span className="loading"></span> Sending...</>
           ) : (
-            'Send MNEE'
+            sendType === 'mnee' ? 'Send MNEE' : 'Send Gas (ETH)'
           )}
         </button>
 

@@ -173,13 +173,21 @@ export async function sendTransactionViaCdp(fromPhoneNumber, toAddress, data, ne
     const senderWallet = await getOrCreateCdpWallet(fromPhoneNumber);
 
     try {
+        // Build transaction object
+        const txObject = {
+            to: toAddress,
+            data: data,
+        };
+
+        // Add value if specified (for ETH transfers)
+        if (arguments[4]) {
+            txObject.value = arguments[4];
+        }
+
         // Send transaction via CDP
         const result = await cdp.evm.sendTransaction({
             address: senderWallet.address,
-            transaction: {
-                to: toAddress,
-                data: data,
-            },
+            transaction: txObject,
             network: network,
         });
 

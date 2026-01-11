@@ -272,6 +272,9 @@ async function handleSendCommand(from, command, senderName) {
   const recipientWallet = await getOrCreateWallet(recipient);
   const txHash = await transferMNEE(from, recipientWallet.address, parseFloat(amount));
 
+  // Wait a moment for tx to propagate before checking new balance
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
   // Get new balance
   const senderWallet = await getOrCreateWallet(from);
   const newBalance = await getBalance(senderWallet.address);
