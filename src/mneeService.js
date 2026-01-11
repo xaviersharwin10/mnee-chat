@@ -5,8 +5,8 @@ import { isCdpConfigured, sendTokenViaCdp, getOrCreateCdpWallet } from './cdpSer
 
 dotenv.config();
 
-// Token Contract Address (PyUSD on Sepolia for testing, or MNEE on mainnet)
-const TOKEN_CONTRACT_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS || process.env.MNEE_CONTRACT_ADDRESS || '0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9';
+// Token Contract Address (MockMNEE on Sepolia for testing, or real MNEE on mainnet)
+const TOKEN_CONTRACT_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS || process.env.MNEE_CONTRACT_ADDRESS || '0x7650906b48d677109F3C20C6B3B89eB0b793c63b';
 
 // ERC20 ABI (minimal for transfer and balance)
 const ERC20_ABI = [
@@ -67,7 +67,7 @@ export function creditUserBalance(phoneNumber, amount) {
 }
 
 /**
- * Get token contract instance (PyUSD on Sepolia for testing)
+ * Get token contract instance (MockMNEE on Sepolia for testing)
  */
 function getMNEEContract(signerOrProvider) {
   return new ethers.Contract(TOKEN_CONTRACT_ADDRESS, ERC20_ABI, signerOrProvider);

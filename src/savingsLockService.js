@@ -30,7 +30,7 @@ const provider = new ethers.JsonRpcProvider(rpcUrl);
 
 // Contract addresses
 const SAVINGS_LOCK_ADDRESS = process.env.SAVINGS_LOCK_ADDRESS;
-const TOKEN_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS || '0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9';
+const TOKEN_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS || '0x7650906b48d677109F3C20C6B3B89eB0b793c63b';
 
 // Interfaces for encoding
 const savingsLockInterface = new ethers.Interface(SAVINGS_LOCK_ABI);

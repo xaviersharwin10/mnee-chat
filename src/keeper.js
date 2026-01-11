@@ -29,7 +29,7 @@ const TOKEN_ABI = [
 const rpcUrl = process.env.ETHEREUM_RPC_URL || process.env.SEPOLIA_RPC_URL || 'https://sepolia.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161';
 const SCHEDULED_PAYMENT_ADDRESS = process.env.SCHEDULED_PAYMENT_ADDRESS;
 const SAVINGS_LOCK_ADDRESS = process.env.SAVINGS_LOCK_ADDRESS;
-const TOKEN_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS || '0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9';
+const TOKEN_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS || '0x7650906b48d677109F3C20C6B3B89eB0b793c63b';
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 // Check every 60 seconds

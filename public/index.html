@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SquadWallet - Send to Phone</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --bg-dark: #0f0f1a;
+      --bg-card: #1a1a2e;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --success: #22c55e;
+      --error: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 440px;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      color: var(--text-dim);
+      font-size: 1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .step {
+      margin-bottom: 28px;
+    }
+
+    .step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .step-number {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text);
+      font-size: 1.1rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 18px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-connect {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-connect:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .wallet-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .wallet-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    .wallet-address {
+      font-family: monospace;
+      font-size: 0.9rem;
+      flex: 1;
+    }
+
+    .disconnect-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .disconnect-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .derived-address {
+      margin-top: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      font-family: monospace;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    .derived-address span {
+      color: var(--text-dim);
+      font-family: inherit;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .message.success {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      color: var(--success);
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: var(--error);
+    }
+
+    .message a {
+      color: inherit;
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">SquadWallet</div>
+      <p class="tagline">Send MNEE to any phone number</p>
+    </header>
+
+    <div class="card">
+      <!-- Step 1: Connect Wallet -->
+      <div class="step">
+        <div class="step-label">
+          <span class="step-number">1</span>
+          Connect your wallet
+        </div>
+        <div id="connect-section">
+          <!-- Web3Modal button will be inserted here -->
+          <w3m-button></w3m-button>
+        </div>
+        <div id="wallet-section" class="hidden">
+          <div class="wallet-status">
+            <span class="wallet-dot"></span>
+            <span class="wallet-address" id="walletAddress">Connected</span>
+            <button class="disconnect-btn" onclick="disconnect()">Disconnect</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Enter Phone -->
+      <div class="step">
+        <div class="step-label">
+          <span class="step-number">2</span>
+          Recipient's phone number
+        </div>
+        <input type="tel" id="phoneInput" placeholder="+91 98406 47352" oninput="onPhoneInput()" />
+        <div id="derivedAddress" class="derived-address hidden">
+          <span>→ Wallet: </span><span id="derivedAddressValue"></span>
+        </div>
+      </div>
+
+      <!-- Step 3: Amount -->
+      <div class="step">
+        <div class="step-label">
+          <span class="step-number">3</span>
+          Amount (MNEE)
+        </div>
+        <input type="number" id="amountInput" placeholder="50" step="0.01" />
+      </div>
+
+      <!-- Send Button -->
+      <button class="btn btn-primary" id="sendBtn" onclick="sendMNEE()" disabled>
+        Send MNEE
+      </button>
+
+      <!-- Status Message -->
+      <div id="statusMessage" class="message hidden"></div>
+    </div>
+
+    <footer>
+      Powered by <a href="https://mnee.io" target="_blank">MNEE</a> |
+      <a href="https://etherscan.io/token/0x8ccedbAe4916b79da7F3F612EfB2EB93A2bFD6cF" target="_blank">Token Contract</a>
+    </footer>
+  </div>
+
+  <!-- Ethers.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+  <!-- Web3Modal / AppKit -->
+  <script type="module">
+    import { createAppKit, useAppKitAccount, useAppKitProvider } from 'https://cdn.jsdelivr.net/npm/@reown/appkit@1.6.8/+esm';
+    import { EthersAdapter } from 'https://cdn.jsdelivr.net/npm/@reown/appkit-adapter-ethers@1.6.8/+esm';
+    import { sepolia, mainnet } from 'https://cdn.jsdelivr.net/npm/@reown/appkit/networks@1.6.8/+esm';
+
+    // Configuration
+    const CONFIG = {
+      TOKEN_ADDRESS: '0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9', // PyUSD Sepolia
+      CHAIN_ID: 11155111,
+      ETHERSCAN_BASE: 'https://sepolia.etherscan.io',
+      WALLET_SALT: 'squadwallet-secret-salt-2024',
+      PROJECT_ID: '1a240ae3b33be6f8e103b0ab20f114af',
+    };
+
+    window.CONFIG = CONFIG;
+
+    // Initialize AppKit
+    const appKit = createAppKit({
+      adapters: [new EthersAdapter()],
+      networks: [sepolia, mainnet],
+      defaultNetwork: sepolia,
+      projectId: CONFIG.PROJECT_ID,
+      metadata: {
+        name: 'SquadWallet',
+        description: 'Send MNEE to any phone number',
+        url: window.location.origin,
+        icons: ['https://mnee.io/favicon.ico']
+      },
+      features: {
+        analytics: false,
+      }
+    });
+
+    window.appKit = appKit;
+
+    // Watch for account changes
+    appKit.subscribeState(state => {
+      console.log('AppKit state:', state);
+      if (state.selectedNetworkId && state.address) {
+        window.connectedAddress = state.address;
+        document.getElementById('connect-section').classList.add('hidden');
+        document.getElementById('wallet-section').classList.remove('hidden');
+        document.getElementById('walletAddress').textContent =
+          state.address.slice(0, 6) + '...' + state.address.slice(-4);
+        updateSendButton();
+      } else {
+        window.connectedAddress = null;
+        document.getElementById('connect-section').classList.remove('hidden');
+        document.getElementById('wallet-section').classList.add('hidden');
+        updateSendButton();
+      }
+    });
+
+    // Make provider available globally
+    window.getProvider = async () => {
+      const { walletProvider } = useAppKitProvider('eip155');
+      return new ethers.providers.Web3Provider(walletProvider);
+    };
+  </script>
+
+  <script>
+    const ERC20_ABI = [
+      'function transfer(address to, uint256 amount) external returns (bool)',
+      'function balanceOf(address account) external view returns (uint256)',
+      'function decimals() external view returns (uint8)',
+    ];
+
+    // Derive wallet address from phone number
+    function deriveAddressFromPhone(phone) {
+      const normalized = phone.replace(/[^\d]/g, '');
+      if (normalized.length < 10) return null;
+
+      const seed = `squadwallet-${normalized}-${window.CONFIG?.WALLET_SALT || 'squadwallet-secret-salt-2024'}`;
+      const hash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(seed));
+      const wallet = new ethers.Wallet(hash);
+      return wallet.address;
+    }
+
+    // Disconnect
+    async function disconnect() {
+      if (window.appKit) {
+        await window.appKit.disconnect();
+      }
+    }
+
+    // Handle phone input
+    function onPhoneInput() {
+      const phone = document.getElementById('phoneInput').value;
+      const derivedEl = document.getElementById('derivedAddress');
+      const derivedVal = document.getElementById('derivedAddressValue');
+
+      const address = deriveAddressFromPhone(phone);
+
+      if (address) {
+        derivedVal.textContent = address;
+        derivedEl.classList.remove('hidden');
+      } else {
+        derivedEl.classList.add('hidden');
+      }
+
+      updateSendButton();
+    }
+
+    // Update send button state
+    function updateSendButton() {
+      const phone = document.getElementById('phoneInput').value;
+      const amount = document.getElementById('amountInput').value;
+      const btn = document.getElementById('sendBtn');
+
+      const address = deriveAddressFromPhone(phone);
+      btn.disabled = !window.connectedAddress || !address || !amount || parseFloat(amount) <= 0;
+    }
+
+    // Send MNEE
+    async function sendMNEE() {
+      const phone = document.getElementById('phoneInput').value;
+      const amount = document.getElementById('amountInput').value;
+      const btn = document.getElementById('sendBtn');
+
+      const recipientAddress = deriveAddressFromPhone(phone);
+      if (!recipientAddress) {
+        showMessage('Invalid phone number', 'error');
+        return;
+      }
+
+      btn.innerHTML = '<span class="loading"></span> Sending...';
+      btn.disabled = true;
+
+      try {
+        const provider = await window.getProvider();
+        const signer = provider.getSigner();
+
+        const tokenContract = new ethers.Contract(window.CONFIG.TOKEN_ADDRESS, ERC20_ABI, signer);
+        const decimals = await tokenContract.decimals();
+        const amountWei = ethers.utils.parseUnits(amount.toString(), decimals);
+
+        const tx = await tokenContract.transfer(recipientAddress, amountWei);
+        showMessage(`⏳ Transaction sent! Waiting for confirmation...`, 'success');
+
+        const receipt = await tx.wait();
+
+        const txLink = `${window.CONFIG.ETHERSCAN_BASE}/tx/${receipt.transactionHash}`;
+        showMessage(
+          `✅ Sent ${amount} MNEE to phone ${phone}!<br>` +
+          `<a href="${txLink}" target="_blank">View on Etherscan →</a>`,
+          'success'
+        );
+
+        document.getElementById('amountInput').value = '';
+
+      } catch (error) {
+        console.error('Send error:', error);
+        showMessage(error.reason || error.message, 'error');
+      }
+
+      btn.innerHTML = 'Send MNEE';
+      updateSendButton();
+    }
+
+    // Show status message
+    function showMessage(msg, type) {
+      const el = document.getElementById('statusMessage');
+      el.innerHTML = msg;
+      el.className = `message ${type}`;
+      el.classList.remove('hidden');
+    }
+
+    // Listen for input changes
+    document.getElementById('amountInput').addEventListener('input', updateSendButton);
+  </script>
+</body>
+
+</html>
