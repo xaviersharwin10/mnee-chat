@@ -82,8 +82,12 @@ loadUserMap();
  */
 export async function getOrCreateCdpWallet(phoneNumber) {
     const normalized = phoneNumber.replace(/[^\d]/g, '');
-    // Account name: mneechat-{phone} (max 36 chars, plenty of room)
-    const accountName = `mneechat-${normalized}`;
+
+    // Account name constraints: max 36 chars, valid chars: a-z, 0-9, -
+    // Format: mneechat-{last 20 digits}
+    // This handles extremely long phone numbers while keeping uniqueness for normal ones.
+    const safePhone = normalized.slice(-20);
+    const accountName = `mneechat-${safePhone}`;
 
     // Check cache first
     if (phoneToAccountMap.has(normalized)) {
