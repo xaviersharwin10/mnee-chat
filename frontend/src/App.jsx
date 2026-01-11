@@ -47,7 +47,7 @@ function SendToPhone() {
   useEffect(() => {
     const fetchAddress = async () => {
       const normalized = phone.replace(/[^\d]/g, '');
-      if (normalized.length < 10) {
+      if (!normalized) {
         setDerivedAddress(null);
         return;
       }
@@ -142,7 +142,7 @@ function SendToPhone() {
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="+91 98406 47352"
+            placeholder="+91 9876543210"
           />
           {isLoadingAddress && (
             <div className="derived-address" style={{ opacity: 0.6 }}>

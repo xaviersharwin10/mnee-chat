@@ -39,8 +39,8 @@ app.get('/api/health', (req, res) => {
 app.get('/api/wallet/:phone', async (req, res) => {
   try {
     const phone = req.params.phone.replace(/[^\d]/g, '');
-    if (phone.length < 10) {
-      return res.status(400).json({ error: 'Invalid phone number' });
+    if (!phone) {
+      return res.status(400).json({ error: 'Phone number is required' });
     }
     const wallet = await getOrCreateWallet(phone);
     res.json({
