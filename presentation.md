@@ -5,14 +5,31 @@ paginate: true
 backgroundColor: #fff
 ---
 
-<!-- 
-To convert: 
+<!--
+To convert:
 - Install: npm install -g @marp-team/marp-cli
 - Run: marp presentation.md --pptx
-- Or use: https://marp.app/ 
+- Or use: https://marp.app/
 -->
 
-# MNEEchat 🚀
+# Live Demo Strategy 🎬
+
+### Step 1: Join Bot 📱
+[wa.me/14155238886](https://wa.me/14155238886?text=join%20depth-army) → Send `join depth-army`
+
+### Step 2: Get Funds 🚰
+*   **Whatsapp**: Text `faucet` (Get 100 MockMNEE)
+*   **Web**: Click "Get Test Tokens" button
+
+### Step 3: Web Portal 🌐
+[mnee-chat.vercel.app](https://mnee-chat.vercel.app)
+*   Send **MNEE** to any phone
+*   Send **ETH (Gas)** to any phone (onboard users with gas!)
+*   Visualize the flow
+
+---
+
+# Why MNEE Wins 🏆🚀
 
 ### WhatsApp Payments Powered by MNEE
 

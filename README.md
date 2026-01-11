@@ -1,26 +1,63 @@
 # MNEEchat 🚀
 
-**MNEEchat** turns WhatsApp into a programmable banking interface powered by **MNEE Stablecoin**. No apps. No seed phrases. Just text and send money.
+**WhatsApp Payments Powered by MNEE** — *Send stablecoins as easily as a text message.*
 
-> *"Send 50 MNEE to +919876543210"* — That's it. Done in 3 seconds.
-
-[![Demo Video](https://img.shields.io/badge/▶_Watch_Demo-YouTube-red?style=for-the-badge)](https://youtube.com)
-[![Try on WhatsApp](https://img.shields.io/badge/💬_Try_Now-WhatsApp-25D366?style=for-the-badge)](https://wa.me/14155238886?text=join%20depth-army)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
-## � Try It Now!
+## 🏆 Hackathon Judge Guide (Start Here)
 
-1. **Click here**: [Open WhatsApp Bot](https://wa.me/14155238886?text=join%20depth-army)
-2. **IMPORTANT**: Send `join depth-army` first (activates Twilio sandbox)
-3. **Then text**: `Hi` to create your wallet and start!
+Follow these steps to fully test the application on **Sepolia Testnet** (using MockMNEE):
 
-### Web Portal
-**[https://mnee-chat.vercel.app](https://mnee-chat.vercel.app)** — Connect wallet, send MNEE or ETH to any phone!
+### Step 1: Join the Bot 📱
+1. Click to open in WhatsApp: **[wa.me/14155238886](https://wa.me/14155238886?text=join%20depth-army)**
+2. **IMPORTANT**: You MUST send the pre-filled message `join depth-army` to activate the Sandbox.
+3. Wait for the confirmation: *"You are all set!"*
+
+### Step 2: Get Test Tokens (Faucet) 🚰
+You need **MockMNEE** tokens to use the bot.
+*   **Option A (Easiest)**: Text `faucet` to the bot. It will send 100 MNEE to your derived wallet.
+*   **Option B (Web)**: Go to **[mnee-chat.vercel.app](https://mnee-chat.vercel.app)**, enter your phone number, and click `🚰 Get 100 Test MNEE Tokens`.
+
+### Step 3: Test Core Features ⚡
+Try these commands in WhatsApp:
+
+1.  **Check Balance**: `balance` (Should show 100 MNEE)
+2.  **Send Money**: `send 10 to +919876543210` (Or use a friend's number)
+3.  **Lock Savings**: `lock 50 for 1 minute` (Wait 1 min, then `withdraw lock <id>`)
+4.  **Recurring Pay**: `schedule 1 to +919876543210 every 2 minutes`
+
+### Step 4: Web Portal (Gas & MNEE) 🌐
+Use the **[Web Portal](https://mnee-chat.vercel.app)** to interact from a browser:
+1.  Connect your MetaMask (Sepolia).
+2.  Enter any phone number.
+3.  **Send Gas (ETH)**: Select "Gas (ETH)" to send Sepolia ETH to a phone's smart wallet so they can pay gas fees!
+4.  **Send MNEE**: Send MockMNEE directly from your browser wallet to a phone number.
 
 ---
 
-## �💡 The Problem We Solve
+## ⚙️ Mainnet Configuration (For Production)
+
+To run MNEEchat with **Real MNEE** on Ethereum Mainnet:
+
+1.  **Update `.env`**:
+    ```bash
+    # Switch RPC to Mainnet
+    ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/YOUR_KEY
+    
+    # Set Real MNEE Contract Address
+    TOKEN_CONTRACT_ADDRESS=0x8ccedbAe4916b79da7F3F612EfB2EB93A2bFD6cF
+    
+    # Update Coinbase CDP Network
+    CDP_NETWORK_ID=ethereum-mainnet
+    ```
+2.  **Fund System Wallet**: Ensure your `PRIVATE_KEY` wallet has real ETH for gas sponsorship (if using sponsor mode).
+3.  **Deploy**: Run `npm start`. The bot will now process real USD stablecoin transactions!
+
+---
+
+## 💡 The Problem We Solve
 
 **2 billion people** use WhatsApp daily. Yet sending crypto still requires:
 - Downloading apps 📱
