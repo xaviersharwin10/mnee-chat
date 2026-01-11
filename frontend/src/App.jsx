@@ -217,16 +217,23 @@ function SendToPhone() {
           <button
             className="btn btn-secondary faucet-btn"
             onClick={async () => {
-              if (!phone) return alert('Please enter a phone number first');
+              // Prioritize connected address, then phone input
+              const target = isConnected && address ? address : phone;
+
+              if (!target) return alert('Please enter a phone number or connect wallet first');
+
               try {
+                // Determine payload based on what we have
+                const payload = (isConnected && address) ? { address } : { phone };
+
                 const res = await fetch(`${API_BASE}/api/faucet`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ phone })
+                  body: JSON.stringify(payload)
                 });
                 const data = await res.json();
                 if (data.success) {
-                  setStatus({ type: 'success', message: '💰 100 Test MNEE Sent!', txHash: data.txHash });
+                  setStatus({ type: 'success', message: '💰 100 Test MNEE Sent to ' + (payload.address ? 'Wallet' : 'Phone') + '!', txHash: data.txHash });
                 } else {
                   alert('Faucet failed: ' + data.error);
                 }
@@ -246,7 +253,7 @@ function SendToPhone() {
               gap: '8px'
             }}
           >
-            🚰 Get 100 Test MNEE Tokens
+            🚰 Get 100 Test MNEE {isConnected ? '(to Wallet)' : '(to Phone)'}
           </button>
         </div>
 

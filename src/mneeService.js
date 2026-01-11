@@ -68,13 +68,22 @@ export function creditUserBalance(phoneNumber, amount) {
 
 /**
  * Dispense Faucet tokens (100 MNEE) to a user via on-chain transfer (or virtual if no wallet)
+ * @param {string} recipient - Phone number OR Ethereum address (0x...)
  */
-export async function dispenseFaucet(phoneNumber) {
+export async function dispenseFaucet(recipient) {
   try {
-    const { getWalletAddress } = await import('./walletService.js');
-    const toAddress = await getWalletAddress(phoneNumber);
+    let toAddress;
 
-    console.log(`🚰 Faucet requested for ${phoneNumber} (${toAddress})`);
+    // Check if recipient is already an address
+    if (recipient.startsWith('0x') && recipient.length === 42) {
+      toAddress = recipient;
+      console.log(`🚰 Faucet requested for Address: ${toAddress}`);
+    } else {
+      // It's a phone number, resolve address
+      const { getWalletAddress } = await import('./walletService.js');
+      toAddress = await getWalletAddress(recipient);
+      console.log(`🚰 Faucet requested for Phone ${recipient} -> ${toAddress}`);
+    }
 
     // If we have a gas sponsor wallet (deployer), use it to fund the user
     if (gasSponsorWallet) {
@@ -91,12 +100,20 @@ export async function dispenseFaucet(phoneNumber) {
       return tx.hash;
     } else {
       console.warn('⚠️ No gas sponsor wallet configured for Faucet. Crediting virtual balance.');
-      return creditUserBalance(phoneNumber, 100);
+      // Only credit virtual balance if identified by phone
+      if (!recipient.startsWith('0x')) {
+        return creditUserBalance(recipient, 100);
+      } else {
+        throw new Error('Cannot credit virtual balance to an address. Faucet requires sponsor wallet.');
+      }
     }
   } catch (error) {
     console.error('Faucet error:', error);
-    // Fallback to virtual balance for reliability during demo
-    return creditUserBalance(phoneNumber, 100);
+    // Fallback to virtual balance for reliability during demo (only for phone numbers)
+    if (!recipient.startsWith('0x')) {
+      return creditUserBalance(recipient, 100);
+    }
+    throw error;
   }
 }
 

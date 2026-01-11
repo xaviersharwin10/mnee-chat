@@ -59,13 +59,15 @@ app.get('/api/wallet/:phone', async (req, res) => {
 // API: Faucet - Dispense test tokens
 app.post('/api/faucet', async (req, res) => {
   try {
-    const { phone } = req.body;
-    if (!phone) {
-      return res.status(400).json({ error: 'Phone number is required' });
+    const { phone, address } = req.body;
+    const target = address || phone;
+
+    if (!target) {
+      return res.status(400).json({ error: 'Phone number or Address is required' });
     }
 
     const { dispenseFaucet } = await import('./mneeService.js');
-    const txHash = await dispenseFaucet(phone);
+    const txHash = await dispenseFaucet(target);
 
     res.json({
       success: true,
