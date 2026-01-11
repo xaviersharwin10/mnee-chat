@@ -12,8 +12,8 @@
 ## � Try It Now!
 
 1. **Click here**: [Open WhatsApp Bot](https://wa.me/14155238886?text=join%20depth-army)
-2. **Send**: `join depth-army` (to activate sandbox)
-3. **Then text**: `Hi` to get started!
+2. **IMPORTANT**: Send `join depth-army` first (activates Twilio sandbox)
+3. **Then text**: `Hi` to create your wallet and start!
 
 ### Web Portal
 **[https://mnee-chat.vercel.app](https://mnee-chat.vercel.app)** — Connect wallet, send MNEE or ETH to any phone!
