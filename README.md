@@ -122,12 +122,45 @@ We address the **Financial Automation** and **AI & Agent Payments** tracks by bu
 
 ## 📜 Smart Contracts
 
-| Contract | Address (Sepolia) | Function |
+### Deployed Contracts (Sepolia Testnet)
+
+| Contract | Address | Etherscan |
 | :--- | :--- | :--- |
-| **MNEE Token** | `0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9` | The money. |
-| **ScheduledPayment** | *(See .env)* | Handles automatic execution. |
-| **SavingsLock** | *(See .env)* | Handles time-locked storage. |
+| **MockMNEE Token** | `0x7650906b48d677109F3C20C6B3B89eB0b793c63b` | [View →](https://sepolia.etherscan.io/address/0x7650906b48d677109F3C20C6B3B89eB0b793c63b) |
+| **PaymentRequest** | `0x5E6669Dee4e5387D2D93f8fAf91A713555463Bd6` | [View →](https://sepolia.etherscan.io/address/0x5E6669Dee4e5387D2D93f8fAf91A713555463Bd6) |
+| **SavingsLock** | *(See .env)* | Time-locked savings |
+| **ScheduledPayment** | *(See .env)* | Recurring payments |
+
+> **⚠️ Note on Mock Token**: Since there is no official MNEE contract on Sepolia testnet, we deployed a custom `MockMNEE` ERC-20 token that mimics the real MNEE:
+> - **Name**: Mock MNEE Stablecoin
+> - **Symbol**: MNEE  
+> - **Decimals**: 6 (same as real MNEE)
+> - **Features**: Public `mint()` and `faucet()` for testing
+>
+> This allows full functionality testing without real money. See "Mainnet Migration" below.
+
+---
+
+## 🚀 Mainnet Migration
+
+To deploy on Ethereum Mainnet with **real MNEE**, update your `.env`:
+
+```env
+# Switch from MockMNEE (testnet) to Real MNEE (mainnet)
+TOKEN_CONTRACT_ADDRESS=0x8ccedbAe4916b79da7F3F612EfB2EB93A2bFD6cF
+
+# Use mainnet RPC
+ETHEREUM_RPC_URL=https://mainnet.infura.io/v3/YOUR_KEY
+
+# Redeploy contracts to mainnet and update these:
+PAYMENT_REQUEST_ADDRESS=0x...
+SAVINGS_LOCK_ADDRESS=0x...
+SCHEDULED_PAYMENT_ADDRESS=0x...
+```
+
+**Cost Estimate**: ~$50-100 for contract deployments + gas
 
 ---
 
 _Built for the MNEE Hackathon 2025._
+
