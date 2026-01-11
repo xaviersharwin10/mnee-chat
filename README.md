@@ -15,6 +15,9 @@
 2. **Send**: `join depth-army` (to activate sandbox)
 3. **Then text**: `Hi` to get started!
 
+### Web Portal
+**[https://mnee-chat.vercel.app](https://mnee-chat.vercel.app)** — Connect wallet, send MNEE or ETH to any phone!
+
 ---
 
 ## �💡 The Problem We Solve
