@@ -14,3 +14,4 @@ package-lock.json
 DEMO_SCRIPT.md
 user_map.json
 ngrok.log
+.cursor/
