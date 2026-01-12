@@ -14,18 +14,19 @@ To convert:
 
 # Live Demo Strategy 🎬
 
-### Step 1: Join Bot 📱
-[wa.me/14155238886](https://wa.me/14155238886?text=join%20depth-army) → Send `join depth-army`
+### The 3-Step "Wow" Flow:
 
-### Step 2: Get Funds 🚰
-*   **Whatsapp**: Text `faucet` (Get 100 MockMNEE)
-*   **Web**: Click "Get Test Tokens" button
+1.  **Get Funds (Web)** 🚰
+    *   Go to **[mnee-chat.vercel.app](https://mnee-chat.vercel.app)**
+    *   Connect Wallet & Click "Get 100 Test MNEE"
 
-### Step 3: Web Portal 🌐
-[mnee-chat.vercel.app](https://mnee-chat.vercel.app)
-*   Send **MNEE** to any phone
-*   Send **ETH (Gas)** to any phone (onboard users with gas!)
-*   Visualize the flow
+2.  **Bridge to WhatsApp** 🌉
+    *   On Web: Enter phone number -> Click "**Send MNEE**"
+    *   *Voiceover: "I'm funding my phone number directly from the web."*
+
+3.  **The Magic (WhatsApp)** 📱
+    *   Open WhatsApp -> Text `balance` (See funds!)
+    *   Text `send 10 to [Friend]` (Instant transfer)
 
 ---
 
