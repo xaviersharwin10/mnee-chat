@@ -70,20 +70,28 @@ That's it. Done in 3 seconds.
 
 ---
 
-# How It Works 🔧
+# 🏗 System Architecture
 
+```mermaid
+sequenceDiagram
+    participant User as 👤 User (WhatsApp)
+    participant Twilio as 💬 Twilio
+    participant Server as ⚙️ MNEEchat Server
+    participant CDP as 🛡️ Coinbase CDP
+    participant Chain as ⛓️ MNEE (Ethereum)
+
+    User->>Twilio: "send 10 to +919876543210"
+    Twilio->>Server: Webhook (Message)
+    Server->>Server: Parse command & resolve wallet
+    Server->>CDP: Sign & Send Transaction
+    CDP->>Chain: Broadcast to Blockchain
+    Chain-->>CDP: Tx Hash ✅
+    CDP-->>Server: Confirmation
+    Server->>Twilio: "✅ Sent! View: etherscan.io/tx/..."
+    Twilio->>User: Instant Confirmation
 ```
-┌──────────────┐     ┌──────────┐     ┌────────────────┐     ┌──────────────┐     ┌────────────┐
-│  👤 User     │────▶│  Twilio  │────▶│ MNEEchat       │────▶│ Coinbase CDP │────▶│ Blockchain │
-│  (WhatsApp)  │     │          │     │ Server         │     │ (MPC Wallet) │     │ (MNEE)     │
-└──────────────┘     └──────────┘     └────────────────┘     └──────────────┘     └────────────┘
-       │                                      │                                           │
-       │  "send 10 to +91..."                 │  Parse & resolve wallet                   │
-       │                                      │  Sign via CDP                             │
-       │                                      │                                           │
-       │◀─────────────────────────────────────│◀──────────────────────────────────────────│
-       │  "✅ Sent! View: etherscan.io/..."   │                                           │
-```
+
+---
 
 **Key**: Coinbase CDP provides secure MPC wallets — users never see private keys.
 

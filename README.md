@@ -290,8 +290,7 @@ _Built for the MNEE Hackathon 2025_ 🏆
 This project utilizes the following third-party APIs and SDKs. All usage is in compliance with their respective Terms of Service and Developer Policies:
 
 *   **[Coinbase CDP](https://cdp.coinbase.com/)**: Used for MPC Wallet generation and on-chain transaction signing. (SDK: `@coinbase/cdp-sdk`)
-*   **[MNEE](https://mnee.net/)**: The stablecoin powering the ecosystem. (SDK: `@mnee/ts-sdk`)
-*   **[Twilio](https://www.twilio.com/)**: Used for WhatsApp Business API integration. (SDK: `twilio`)
+\*   **[Twilio](https://www.twilio.com/)**: Used for WhatsApp Business API integration. (SDK: `twilio`)
 *   **[Google Gemini](https://ai.google.dev/)**: Used for Natural Language Processing of user commands. (SDK: `@google/generative-ai`)
 
 _Note: API keys and secrets are managed via environment variables and are not included in this repository._
