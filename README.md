@@ -8,7 +8,7 @@ MNEEchat turns WhatsApp into a programmable banking interface powered by MNEE. I
 
 ---
 
-## 🏆 Hackathon Judge Guide (Start Here)
+## 🏆 Usage Instructions (Start Here)
 
 Follow these steps to fully test the application on **Sepolia Testnet** (using MockMNEE):
 
@@ -282,3 +282,16 @@ Ensure your `PRIVATE_KEY` wallet has mainnet ETH for gas fees.
 ---
 
 _Built for the MNEE Hackathon 2025_ 🏆
+
+---
+
+## ⚖️ Third-Party Services & Permissions
+
+This project utilizes the following third-party APIs and SDKs. All usage is in compliance with their respective Terms of Service and Developer Policies:
+
+*   **[Coinbase CDP](https://cdp.coinbase.com/)**: Used for MPC Wallet generation and on-chain transaction signing. (SDK: `@coinbase/cdp-sdk`)
+*   **[MNEE](https://mnee.net/)**: The stablecoin powering the ecosystem. (SDK: `@mnee/ts-sdk`)
+*   **[Twilio](https://www.twilio.com/)**: Used for WhatsApp Business API integration. (SDK: `twilio`)
+*   **[Google Gemini](https://ai.google.dev/)**: Used for Natural Language Processing of user commands. (SDK: `@google/generative-ai`)
+
+_Note: API keys and secrets are managed via environment variables and are not included in this repository._
