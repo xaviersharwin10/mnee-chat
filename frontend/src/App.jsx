@@ -213,7 +213,7 @@ function SendToPhone() {
       </header>
 
       <div className="card">
-        <div className="connect-section" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="connect-section" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
           <ConnectButton showBalance={false} />
 
           {/* Wallet Faucet Button - Only shown when connected */}
