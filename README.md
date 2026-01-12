@@ -253,6 +253,7 @@ Ensure your `PRIVATE_KEY` wallet has mainnet ETH for gas fees.
 | **MockMNEE** | `0x7650906b48d677109F3C20C6B3B89eB0b793c63b` | [Etherscan →](https://sepolia.etherscan.io/address/0x7650906b48d677109F3C20C6B3B89eB0b793c63b) |
 | **PaymentRequest** | `0xc03EAEA9D7D16262327e018243526DaB5aaCDf11` | [Etherscan →](https://sepolia.etherscan.io/address/0xc03EAEA9D7D16262327e018243526DaB5aaCDf11) |
 | **SavingsLock** | `0xE87659941573D830A0D04F58e8fe18D4fa455e0a` | [Etherscan →](https://sepolia.etherscan.io/address/0xE87659941573D830A0D04F58e8fe18D4fa455e0a) |
+| **ScheduledPayment** | `0xD105853F980d31A9C053103F8D54CdF24312C96f` | [Etherscan →](https://sepolia.etherscan.io/address/0xD105853F980d31A9C053103F8D54CdF24312C96f) |
 
 ---
 
