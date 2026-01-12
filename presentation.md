@@ -73,23 +73,28 @@ That's it. Done in 3 seconds.
 
 # 🏗 System Architecture
 
-```mermaid
-sequenceDiagram
-    participant User as 👤 User (WhatsApp)
-    participant Twilio as 💬 Twilio
-    participant Server as ⚙️ MNEEchat Server
-    participant CDP as 🛡️ Coinbase CDP
-    participant Chain as ⛓️ MNEE (Ethereum)
-
-    User->>Twilio: "send 10 to +919876543210"
-    Twilio->>Server: Webhook (Message)
-    Server->>Server: Parse command & resolve wallet
-    Server->>CDP: Sign & Send Transaction
-    CDP->>Chain: Broadcast to Blockchain
-    Chain-->>CDP: Tx Hash ✅
-    CDP-->>Server: Confirmation
-    Server->>Twilio: "✅ Sent! View: etherscan.io/tx/..."
-    Twilio->>User: Instant Confirmation
+```text
+[ 👤 User ]
+    │
+    │  (1) "send 10 to +91..." 💬
+    👇
+[ 📲 Twilio / WhatsApp ]
+    │
+    │  (2) SMS Webhook ⚡
+    👇
+[ ⚙️ MNEEchat Server ] ──────▶ [ 🛡️ Coinbase CDP (MPC) ]
+    │    (3) Parse & Resolve          │
+    │                                 │ (4) Sign & Send Tx ✍️
+    │                                 👇
+    │                         [ ⛓️ Ethereum / MNEE ]
+    │                                 │
+    │    (6) Confirmation ✅          │ (5) Confirm on-chain 🧱
+    │                                 │
+    ◀─────────────────────────────────┘
+    │
+    │  (7) "✅ Sent! Tx: 0x123..."
+    👇
+[ 👤 User ]
 ```
 
 ---
