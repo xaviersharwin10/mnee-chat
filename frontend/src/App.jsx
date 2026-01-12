@@ -214,15 +214,15 @@ function SendToPhone() {
 
       {/* Quick Start Guide */}
       <div className="instructions-card" style={{
-        background: 'rgba(255, 255, 255, 0.05)',
+        background: 'rgba(0, 0, 0, 0.05)',
         padding: '16px',
         borderRadius: '16px',
         marginBottom: '20px',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
+        border: '1px solid rgba(0, 0, 0, 0.1)',
         textAlign: 'left'
       }}>
-        <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#fff' }}>🚀 Quick Start Guide</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>
+        <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#000' }}>🚀 Quick Start Guide</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.9rem', color: '#333' }}>
           <div style={{ display: 'flex', gap: '8px' }}>
             <span>1️⃣</span>
             <span><strong>Get Funds:</strong> Connect Wallet & get 100 Test MNEE.</span>
