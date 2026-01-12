@@ -212,6 +212,32 @@ function SendToPhone() {
         </a>
       </header>
 
+      {/* Quick Start Guide */}
+      <div className="instructions-card" style={{
+        background: 'rgba(255, 255, 255, 0.05)',
+        padding: '16px',
+        borderRadius: '16px',
+        marginBottom: '20px',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        textAlign: 'left'
+      }}>
+        <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#fff' }}>🚀 Quick Start Guide</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <span>1️⃣</span>
+            <span><strong>Get Funds:</strong> Connect Wallet & get 100 Test MNEE.</span>
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <span>2️⃣</span>
+            <span><strong>Fund Phone:</strong> Enter your number below & Send MNEE.</span>
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <span>3️⃣</span>
+            <span><strong>Start Chatting:</strong> Click "Chat on WhatsApp" & send text!</span>
+          </div>
+        </div>
+      </div>
+
       <div className="card">
         <div className="connect-section" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
           <ConnectButton showBalance={false} />
